@@ -1,0 +1,170 @@
+﻿<! DOCTYPE HTML>
+<html>
+<head>
+<style>
+  table tr td {
+    margine:0px;
+	border:0px;
+	padding:0px;
+	cellspacing:0px;
+	cellpadding:0px;
+  }
+  button {
+    height:23px;
+	width:23px;
+	background-color:lightgrey;
+	border:1px solid grey;
+  }
+  .longbtn {
+    height:50px;
+  }
+  .widebtn {
+    width:48px;
+  }
+  #op {
+    width:100px;
+	text-align:right;
+	font-weight:bold;
+	height:30px;
+	font-size:22px;
+	border:1px solid black;
+	overflow:scroll;
+  }
+  #eql {
+    background-color:orange;
+	border:1px solid orange;
+	outline:none;
+  }
+  button:active:hover {
+    background-color:pink;
+  }
+  #clr {
+    background-color:red;
+	border:1px solid red;
+	color:white;
+  }
+  #sign {
+    background-color:grey;
+	border:1px solid grey;
+  }
+</style>
+  <script>
+    function add(){
+	  var fnum = parseFloat(document.getElementById('fnum').value);
+	  var snum = parseFloat(document.getElementById('snum').value);
+	  document.getElementById('op').value = (fnum + snum);
+	}	
+	function input(btn){
+	  var outbox = document.getElementById('op');
+	  if(btn == '0' && outbox.value == '0'){
+	    return;
+	  }
+	  if( /[1-9]/.test(btn) && outbox.value == '0'){
+	    outbox.value = '';
+	  }
+	  if(btn == '+' || btn == '-' || btn == '*' || btn == '/' || btn == '.'){
+	    var lc = outbox.value;
+		lc = lc.slice(-1);
+	    if(lc == btn){
+		  return;
+		}
+        
+		if(outbox.value == '0'){
+		}
+		else if(lc == '+' || lc == '-' || lc == '*' || lc == '/' || btn == '.'){
+		  var value = outbox.value;
+		  outbox.value = value.slice(0, -1);
+		}  
+	  }
+	  outbox.value += btn;
+	  
+	}
+	function del(){
+	  var outbox = document.getElementById('op');
+	  outbox.value = outbox.value.slice(0, -1);
+	  if(outbox.value == ""){
+	    outbox.value = "0";
+	  }
+	}
+	function cancel(){
+	  var outbox = document.getElementById('op');
+	  outbox.value = "0";
+	}
+	function getresult(){
+	  var outbox = document.getElementById('op');
+	  if (! isNaN(outbox.value)){
+	    return;
+	  }
+	  var val = outbox.value;
+	  var operand_list = val.split(/[+,\-,*,\/,]+/);
+	  var operator_list = val.split(/[\d,.]+/);
+	  window.value = -1;
+	  operand_list.forEach(dooperation, operator_list);
+	  document.getElementById("op").value = window.value;
+	}
+	function dooperation(item) {
+	  if(window.value == -1) {
+		window.value = parseFloat(item);
+	    return;
+	  }
+	  var curr_op = this.shift();
+	  while (curr_op == "") {
+	    curr_op = this.shift();
+	  }
+	  switch (curr_op) {
+	    case '+':
+		  window.value += parseFloat(item);
+		  break;
+		case '-':
+          window.value -= parseFloat(item);
+          break;
+        case '*':
+          window.value *= parseFloat(item);
+          break;
+		case '/':
+          window.value /= parseFloat(item);
+          break;
+		default: alert('invalid operator:' + curr_op);  
+	  }
+	}
+  </script>
+  
+</head>
+<body>
+  <table>
+  <tr>
+    <th colspan="4"><input id = "op" type = "text" value = "0"></input></th>
+  </tr>
+  <tr>
+    <td><button id = "clr" onclick = "del()" ondblclick= "cancel()">C</button></td>
+    <td><button id = "sign" onclick = "input('/')">/</button></td>
+    <td><button id = "sign" onclick = "input('*')">*</button></td>
+    <td><button id = "sign" onclick = "input('-')">-</button></td>
+  </tr>
+  <tr>
+    <td><button onclick = "input('7')">7</button></td>
+    <td><button onclick = "input('8')">8</button></td>
+    <td><button onclick = "input('9')">9</button></td>
+    <td rowspan="2"><button id = "sign" class = "longbtn" onclick = "input('+')">+</button></td>
+  </tr>
+  <tr>
+    <td><button onclick = "input('4')">4</button></td>
+    <td><button onclick = "input('5')">5</button></td>
+    <td><button onclick = "input('6')">6</button></td>
+  </tr>
+  <tr>
+    <td><button onclick = "input('1')">1</button></td>
+    <td><button onclick = "input('2')">2</button></td>
+    <td><button onclick = "input('3')">3</button></td>
+    <td rowspan="2"><button id = "eql" class = "longbtn" onclick = "getresult()">=</button></td>
+  </tr>
+  <tr>
+    <td colspan="2"><button class = "widebtn" onclick = "input('0')">0</button></td>
+    <td><button onclick = "input('.')">.</button></td>
+  </tr>
+  </table>
+  
+  
+  
+</body>
+</html>
